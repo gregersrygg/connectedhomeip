@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# foo
 name: Build example - ESP32
 
 on:
@@ -26,7 +27,7 @@ jobs:
         env:
             BUILD_TYPE: esp32
 
-        runs-on: ubuntu-latest
+        runs-on: macos-latest
         if: github.actor != 'restyled-io[bot]'
 
         container:
@@ -67,16 +68,7 @@ jobs:
                   cond: ${{ github.event.pull_request.number == '' }}
                   if_true: "${{ github.sha }}"
                   if_false: "pull-${{ github.event.pull_request.number }}"
-            - name: Copy aside bloat report & binaries
-              run: |
-                  cp -r example_binaries/$BUILD_TYPE-build /tmp/output_binaries/
-            - name: Uploading Binaries
-              uses: actions/upload-artifact@v1
-              with:
-                  name:
-                      ${{ env.BUILD_TYPE }}-example-build-${{
-                      steps.outsuffix.outputs.value }}
-                  path: /tmp/output_binaries/${{ env.BUILD_TYPE }}-build
+            
             # - name: Remove third_party binaries for CodeQL Analysis
             #   run: find . -type d -name "third_party" -exec rm -rf {} +
             # - name: Remove m5stack-tft binaries for CodeQL Analysis
